@@ -8,6 +8,13 @@ RUN npm install
 
 # Копируем проект и собираем
 COPY . .
+
+ARG VITE_AUTH_API
+ARG VITE_USER_API
+
+ENV VITE_AUTH_API=$VITE_AUTH_API
+ENV VITE_USER_API=$VITE_USER_API
+
 RUN npm run build
 
 # Stage 2: production stage
