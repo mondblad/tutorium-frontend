@@ -9,13 +9,11 @@ RUN npm install
 # Копируем проект и собираем
 COPY . .
 
-ARG VITE_AUTH_API
-ARG VITE_USER_API
+ARG MODE=production
 
-ENV VITE_AUTH_API=$VITE_AUTH_API
-ENV VITE_USER_API=$VITE_USER_API
+ENV MODE=${MODE}
 
-RUN npm run build
+RUN npm run build:${MODE}
 
 # Stage 2: production stage
 FROM nginx:stable-alpine

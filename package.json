@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:docker": "tsc -b && vite build --mode docker",
+    "build:production": "tsc -b && vite build --mode production",
     "lint": "eslint .",
     "preview": "vite preview",
     "apigen:auth": "openapi --input ./src/api/openapi/auth-service.json --output ./src/api/generate/auth-service --client axios && barrelsby --directory src/api/generate/auth-service/services --delete",
