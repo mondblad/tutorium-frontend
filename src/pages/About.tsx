@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AuthApi, UserApi } from "../api";
 
-const Home: React.FC = () => {
+export const About: React.FC = () => {
   const [versionUser, setVersionUser] = useState<string>("");
   const [versionAuth, setVersionAuth] = useState<string>("");
   
@@ -30,11 +30,9 @@ const Home: React.FC = () => {
   
   return (
       <>
-      <h1>Главная страница</h1>
+      <h1>О сайте</h1>
       <p>Версия User сервиса: {versionUser || "загрузка..."}</p>
       <p>Версия Auth сервиса: {versionAuth || "загрузка..."}</p>
       </>
     );
 };
-
-export default Home;

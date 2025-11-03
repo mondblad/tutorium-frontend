@@ -15,14 +15,14 @@ const Sidebar: React.FC = () => {
         selectedKeys={[location.pathname]}
         items={[
           {
-            key: "/",
+            key: "/home",
             icon: <HomeOutlined />,
-            label: <Link to="/">Главная</Link>,
+            label: <Link to={"/app/home"}>Главная</Link>,
           },
           {
             key: "/about",
             icon: <InfoCircleOutlined />,
-            label: <Link to="/about">О сайте</Link>,
+            label: <Link to={"/app/about"}>О сайте</Link>,
           }
         ]}
       />

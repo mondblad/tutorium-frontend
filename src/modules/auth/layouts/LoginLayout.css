@@ -1,0 +1,20 @@
+.login-layout-main {
+    background-color: rgb(225, 230, 225);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;   /* с маленькой буквы */
+    align-items: center;       /* с маленькой буквы */
+}
+
+.login-layout-center-block {
+    width: 1000px;
+    height: 600px;
+    background-color: white;   /* с маленькой буквы */
+    padding: 1rem;
+    border-radius: 12px;       /* с маленькой буквы */
+    
+    display: flex;
+    justify-content: space-between;  /* с маленькой буквы */
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.3);
+}

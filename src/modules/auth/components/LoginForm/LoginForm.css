@@ -1,0 +1,47 @@
+.login-form {
+    height: 100%;
+    width: 100%;
+    padding: 1.5rem;
+
+    display: flex;
+    justify-content: space-between;  /* с маленькой буквы */
+}
+
+.login-form .image-container {
+    flex: 1;
+    display: flex;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form .img {
+    width: 100%;
+    height: 100%;
+}
+
+.login-form .form-container  {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login-form .google-btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-form  .join-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.login-form .login-form-join {
+    min-width: 300px;
+}

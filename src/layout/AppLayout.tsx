@@ -1,10 +1,10 @@
 import { Layout } from "antd";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/Sidebar.tsx";
 
 const { Content } = Layout;
 
-const AppLayout: React.FC = () => {
+export const AppLayout: React.FC = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sidebar />
@@ -16,5 +16,3 @@ const AppLayout: React.FC = () => {
     </Layout>
   );
 };
-
-export default AppLayout;

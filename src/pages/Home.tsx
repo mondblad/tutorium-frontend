@@ -1,10 +1,7 @@
-const About: React.FC = () => {
+export const Home: React.FC = () => {
   return (
     <>
-      <h1>О сайте</h1> 
-      
+      <h1>Главная страница</h1> 
     </>
   );
 };
-
-export default About;
