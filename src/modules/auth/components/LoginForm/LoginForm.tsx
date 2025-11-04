@@ -3,8 +3,15 @@ import { Form, Input, Button } from 'antd';
 import GoogleIcon from '../../assets/google.png';
 import Sova from '../../assets/sova.webp';
 import "./LoginForm.css"
+import { AuthApi } from "../../../../api/";
 
 export const LoginComponent: React.FC = () => {
+  const handleClick = async () => {
+    const targetUrl = await AuthApi.GoogleAuthService.getGoogleAuthLink();
+    //console.log(targetUrl);
+    window.location.href = targetUrl;
+  };
+
   return (
     <div className='login-form'>
       <div className='image-container'>
@@ -13,11 +20,11 @@ export const LoginComponent: React.FC = () => {
 
       <div className='form-container'>
         <h1>Вход в систему</h1>
-        <Button className='google-btn'>
+        <Button className='google-btn' onClick={handleClick}>
           <img src={GoogleIcon} alt="Google" className='join-icon' />
         </Button>
 
-        <Form name="login" layout="vertical" className='login-form-join' >
+        <Form name="login" layout="vertical" className='login-form-join'  >
           <Form.Item
             label="Логин"
             name="username"
@@ -42,6 +49,6 @@ export const LoginComponent: React.FC = () => {
     </div>
   );
 };
-  
+
 
 
