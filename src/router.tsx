@@ -21,8 +21,13 @@ export const router = createBrowserRouter([
         },
     ],
   },
-  { 
-    path: '*', 
+  //Board
+  {
+    path: '/board',
+    element: <BoardPage />,
+  },
+  {
+    path: '*',
     element: <NotFound />,
   },
 ]);
