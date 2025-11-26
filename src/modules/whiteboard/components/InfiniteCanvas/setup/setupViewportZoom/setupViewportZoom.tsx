@@ -1,34 +1,33 @@
-import * as PIXI from "pixi.js";
+import { BoardManager } from "../../managers/BoardManager";
 
 export const setupViewportZoom = (
+    boardManager: BoardManager,
     canvas: HTMLCanvasElement,
-    container: PIXI.Container,
-    minZoom = 0.1,
-    maxZoom = 5
+    minZoom = 0.25,
+    maxZoom = 3
 ) => {
-    let scale = 1;
-
     const onWheel = (e: WheelEvent) => {
         e.preventDefault();
 
-        const oldScale = scale;
+        const oldScale = boardManager.scale;
         const direction = e.deltaY < 0 ? 1 : -1;
         const zoomFactor = 0.1;
 
         let newScale = oldScale + direction * zoomFactor;
         newScale = Math.max(minZoom, Math.min(maxZoom, newScale));
-        scale = newScale;
+        boardManager.scale = newScale;
 
         const rect = canvas.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
 
-        const worldX = (mouseX - container.x) / oldScale;
-        const worldY = (mouseY - container.y) / oldScale;
+        const worldX = (mouseX - boardManager.zoomLayer.x) / oldScale;
+        const worldY = (mouseY - boardManager.zoomLayer.y) / oldScale;
 
-        container.scale.set(newScale);
-        container.x = mouseX - worldX * newScale;
-        container.y = mouseY - worldY * newScale;
+        // обновляем масштаб и позицию zoomLayer
+        boardManager.zoomLayer.scale.set(newScale);
+        boardManager.zoomLayer.x = mouseX - worldX * newScale;
+        boardManager.zoomLayer.y = mouseY - worldY * newScale;
     };
 
     canvas.addEventListener("wheel", onWheel, { passive: false });
