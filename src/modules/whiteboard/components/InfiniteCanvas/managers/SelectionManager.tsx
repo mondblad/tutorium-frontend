@@ -7,7 +7,7 @@ import { Graphics, /*FederatedPointerEvent*/ } from "pixi.js";
 export class SelectionManager extends BaseRenderObject {
     private selectedObjects: Map<BaseBoardObject, Graphics> = new Map();
 
-    private selectionRect: SelectionRect = new SelectionRect();
+    private selectionRect: SelectionRect;
 
     public isDragging: boolean = false;
 
@@ -36,6 +36,7 @@ export class SelectionManager extends BaseRenderObject {
 
         this.boardManager.zoomLayer.addChild(this.renderContainer);
 
+        this.selectionRect = new SelectionRect(boardMangaer);
         this.renderContainer.addChild(this.selectionRect.container);
         this.renderContainer.sortableChildren = true;
         this.renderContainer.zIndex = 9999;
@@ -55,7 +56,6 @@ export class SelectionManager extends BaseRenderObject {
     }
 
     public selectSingleObject(object: BaseBoardObject): void {
-
         this.deselectAll();
 
         const rect = new Graphics();
@@ -83,6 +83,11 @@ export class SelectionManager extends BaseRenderObject {
         object.select();
 
         this.make();
+    }
+
+    public selectObjects(objects: BaseBoardObject[]): void {
+        this.deselectAll();
+        objects.forEach(t => this.addSelectObject(t));
     }
 
     public deselect(object: BaseBoardObject): void {

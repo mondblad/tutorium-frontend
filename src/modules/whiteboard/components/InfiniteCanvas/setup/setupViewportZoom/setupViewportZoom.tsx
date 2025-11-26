@@ -2,7 +2,6 @@ import { BoardManager } from "../../managers/BoardManager";
 
 export const setupViewportZoom = (
     boardManager: BoardManager,
-    canvas: HTMLCanvasElement,
     minZoom = 0.25,
     maxZoom = 3
 ) => {
@@ -17,7 +16,7 @@ export const setupViewportZoom = (
         newScale = Math.max(minZoom, Math.min(maxZoom, newScale));
         boardManager.scale = newScale;
 
-        const rect = canvas.getBoundingClientRect();
+        const rect = boardManager.appView.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
 
@@ -30,9 +29,9 @@ export const setupViewportZoom = (
         boardManager.zoomLayer.y = mouseY - worldY * newScale;
     };
 
-    canvas.addEventListener("wheel", onWheel, { passive: false });
+    boardManager.appView.addEventListener("wheel", onWheel, { passive: false });
 
     return () => {
-        canvas.removeEventListener("wheel", onWheel);
+        boardManager.appView.removeEventListener("wheel", onWheel);
     };
 };

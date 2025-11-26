@@ -3,6 +3,7 @@ import { SelectionManager } from "./SelectionManager";
 import { Container } from "pixi.js";
 
 export class BoardManager {
+    public appView: HTMLCanvasElement;
     public zoomLayer: Container;
 
     public selectionManager: SelectionManager;;
@@ -10,8 +11,9 @@ export class BoardManager {
 
     public objects: BaseBoardObject[] = [];
 
-    public constructor(zoomLayer: Container) {
+    public constructor(zoomLayer: Container, appView: HTMLCanvasElement) {
         this.zoomLayer = zoomLayer;
+        this.appView = appView;
         this.selectionManager = new SelectionManager(this);
     }
 

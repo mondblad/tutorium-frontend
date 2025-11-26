@@ -12,7 +12,7 @@ export const setupPixi = (
 
     zoomLayer.sortableChildren = true;
 
-    const boardManager = new BoardManager(zoomLayer);
+    const boardManager = new BoardManager(zoomLayer, pixiApp.canvas);
 
     zoomLayer.sortableChildren = true;
 
@@ -24,7 +24,7 @@ export const setupPixi = (
     pixiApp.stage.addChild(zoomLayer);
     pixiApp.stage.addChild(hitAreaBg);
 
-    setupBoardEvent(boardManager, pixiApp.canvas, hitAreaBg);
-    setupViewportZoom(boardManager, pixiApp.canvas);
+    setupBoardEvent(boardManager, hitAreaBg);
+    setupViewportZoom(boardManager);
     setupObjects(boardManager);
 };

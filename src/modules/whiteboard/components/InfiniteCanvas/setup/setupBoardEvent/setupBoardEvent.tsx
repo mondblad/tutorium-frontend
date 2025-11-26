@@ -1,8 +1,12 @@
 import type { BaseBoardObject } from "../setupObjects/objects";
 import { BoardManager } from "../../managers/BoardManager";
 import { FederatedPointerEvent, Graphics } from "pixi.js";
+import { MouseHelper } from "../../helpers/mouseHelper";
+import { SelectionRectManager } from "../../managers/SelectionRectManager";
 
-export const setupBoardEvent = (boardManager: BoardManager, appView: HTMLCanvasElement, hitArea: Graphics) => {
+export const setupBoardEvent = (boardManager: BoardManager, hitArea: Graphics) => {
+    const selectionRectManager: SelectionRectManager = new SelectionRectManager(boardManager);
+
     let isDragging = false;
     let lastX = 0;
     let lastY = 0;
@@ -11,20 +15,20 @@ export const setupBoardEvent = (boardManager: BoardManager, appView: HTMLCanvasE
     let isMoveObject: boolean = false;
     let wasAdded: boolean = false;
 
-    const screenToBoard = (e: MouseEvent): { x: number; y: number } => {
-        const rect = appView.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
+    let selectred: boolean = false;
 
-        const scale = boardManager.scale;
-        const boardX = (mouseX - boardManager.zoomLayer.x) / scale;
-        const boardY = (mouseY - boardManager.zoomLayer.y) / scale;
+    const getDeltaCord = (e: MouseEvent): [number, number] => {
+        const dx = e.clientX - lastX;
+        const dy = e.clientY - lastY;
 
-        return { x: boardX, y: boardY };
-    };
+        lastX = e.clientX;
+        lastY = e.clientY;
 
-    const onLeftDown = (e: MouseEvent): void => {
-        const boardPos = screenToBoard(e);
+        return [dx, dy];
+    }
+
+    const onLeftDown = (e: MouseEvent, boardManager: BoardManager): void => {
+        const boardPos = MouseHelper.screenToBoard(e, boardManager);
         const object = boardManager.getObjectWasClick(boardPos.x, boardPos.y);
 
         if (object) {
@@ -40,14 +44,21 @@ export const setupBoardEvent = (boardManager: BoardManager, appView: HTMLCanvasE
         const wasClickOnSelectRect = boardManager.selectionManager.containsPoint(boardPos.x, boardPos.y);
         if (wasClickOnSelectRect)
             isMoveObject = true;
-        else if (!wasAdded)
+        else if (!wasAdded && !selectred) {
             boardManager.selectionManager.deselectAll();
+
+            selectionRectManager.start(boardPos.x, boardPos.y);
+            selectred = true;
+        }
 
         lastObjectWasClick = object;
     }
 
     const onLeftUp = (e: MouseEvent): void => {
         isMoveObject = false;
+        selectred = false;
+        selectionRectManager.end();
+
         if (!lastObjectWasClick) {
             boardManager.selectionManager.updateLastCord();
             return;
@@ -65,21 +76,6 @@ export const setupBoardEvent = (boardManager: BoardManager, appView: HTMLCanvasE
         wasAdded = false;
     }
 
-    const getDeltaCord = (e: MouseEvent): [number, number] => {
-        const dx = e.clientX - lastX;
-        const dy = e.clientY - lastY;
-
-        lastX = e.clientX;
-        lastY = e.clientY;
-
-        return [dx, dy];
-    }
-
-    const moveContainer = (dx: number, dy: number): void => {
-        boardManager.zoomLayer.x += dx;
-        boardManager.zoomLayer.y += dy;
-    };
-
     const onRightMouseDown = (e: MouseEvent) => {
         isDragging = true;
         lastX = e.clientX;
@@ -92,17 +88,20 @@ export const setupBoardEvent = (boardManager: BoardManager, appView: HTMLCanvasE
         hitArea.cursor = "default";
     };
 
-    const MouseMove = (e: MouseEvent) => {
+    const onMouseMove = (e: MouseEvent) => {
         const [dx, dy] = getDeltaCord(e);
+        const boardPos = MouseHelper.screenToBoard(e, boardManager);
+        if (selectred)
+            selectionRectManager.update(boardPos.x, boardPos.y);
         if (isMoveObject)
             boardManager.selectionManager.move(dx, dy)
         if (isDragging)
-            moveContainer(dx, dy);
+            boardManager.zoomLayer.position.set(boardManager.zoomLayer.x + dx, boardManager.zoomLayer.y + dy);
     }
 
     hitArea.on("pointerdown", (e: FederatedPointerEvent) => {
         console.log('pointerdown');
-        if (e.button === 0) onLeftDown(e);
+        if (e.button === 0) onLeftDown(e, boardManager);
         if (e.button === 2) onRightMouseDown(e);
     });
 
@@ -113,7 +112,7 @@ export const setupBoardEvent = (boardManager: BoardManager, appView: HTMLCanvasE
     });
 
     hitArea.on("pointermove", (e: FederatedPointerEvent) => {
-        MouseMove(e);
+        onMouseMove(e);
     });
 
     hitArea.on("rightclick", (e: FederatedPointerEvent) => {
