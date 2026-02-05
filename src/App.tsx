@@ -2,6 +2,7 @@ import { RouterProvider } from "react-router-dom";
 import { ConfigProvider } from "antd";
 import ru_RU from "antd/locale/ru_RU"; // локаль (можно заменить на en_US)
 import { router } from "./router";
+//import "./assets/css/App.css";
 
 const App: React.FC = () => {
   return (

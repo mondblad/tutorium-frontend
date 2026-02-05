@@ -3,8 +3,28 @@ import { Form, Input, Button } from 'antd';
 import GoogleIcon from '../../assets/google.png';
 import Sova from '../../assets/sova.webp';
 import "./LoginForm.css"
+import { AuthApi } from "@/api";
+
+type LoginFormValues = {
+  username: string;
+  password: string;
+};
 
 export const LoginComponent: React.FC = () => {
+  const onFinish = async (values: LoginFormValues) => {
+    try {
+      await AuthApi.EmailPasswordService.postApiEmailPasswordLogin({
+        email: values.username,
+        password: values.password,
+      });
+
+      //message.success('Успешный вход');
+      // TODO: redirect
+    } catch {
+      //message.error('Ошибка входа');
+    }
+  };
+
   return (
     <div className='login-form'>
       <div className='image-container'>
@@ -17,7 +37,7 @@ export const LoginComponent: React.FC = () => {
           <img src={GoogleIcon} alt="Google" className='join-icon' />
         </Button>
 
-        <Form name="login" layout="vertical" className='login-form-join' >
+        <Form name="login" layout="vertical" className='login-form-join' onFinish={onFinish}>
           <Form.Item
             label="Логин"
             name="username"
@@ -42,6 +62,6 @@ export const LoginComponent: React.FC = () => {
     </div>
   );
 };
-  
+
 
 

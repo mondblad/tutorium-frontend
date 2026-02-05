@@ -1,7 +1,9 @@
 import { OpenAPI as AuthOpenAPI } from './generate/auth-service'; 
 import { OpenAPI as UserOpenAPI } from './generate/user-service'; 
 
-AuthOpenAPI.BASE = import.meta.env.VITE_AUTH_API;
-UserOpenAPI.BASE = import.meta.env.VITE_USER_API;
+const gatewayUrl = import.meta.env.VITE_GATEWAY_URL;
+
+AuthOpenAPI.BASE = `${gatewayUrl}/auth`;
+UserOpenAPI.BASE = `${gatewayUrl}/user`;
 
 export default { AuthOpenAPI, UserOpenAPI };
