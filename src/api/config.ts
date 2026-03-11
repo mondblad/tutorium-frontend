@@ -1,9 +1,6 @@
-import { OpenAPI as AuthOpenAPI } from './generate/auth-service'; 
-import { OpenAPI as UserOpenAPI } from './generate/user-service'; 
+import { client as authClient } from './generate/auth-service/client.gen';
+import { client as userClient } from './generate/user-service/client.gen';
+import { setupApiClient } from './setupApiClient';
 
-const gatewayUrl = import.meta.env.VITE_GATEWAY_URL;
-
-AuthOpenAPI.BASE = `${gatewayUrl}/auth`;
-UserOpenAPI.BASE = `${gatewayUrl}/user`;
-
-export default { AuthOpenAPI, UserOpenAPI };
+setupApiClient(authClient, 'auth');
+setupApiClient(userClient, 'user');
