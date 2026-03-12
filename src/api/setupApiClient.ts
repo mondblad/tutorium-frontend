@@ -1,7 +1,6 @@
 const gatewayUrl = import.meta.env.VITE_GATEWAY_URL;
 
 const handleUnauthorized = (response: Response) => {
-  console.log(response.status);
   if (response.status === 401) {
     console.log('🚫 401 Unauthorized:', response.url);
     

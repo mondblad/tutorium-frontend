@@ -1,65 +1,49 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Form } from "antd";
-import { Reg1 } from "./Reg1";
-import { Reg2 } from "./Reg2";
-import { AuthApi } from "@/api";
+import { RegistrationStart } from "./RegistrationStart";
+import { RegistrationConfirm } from "./RegistrationConfirm";
+import { Spin } from "antd";
 
 export const RegistrationForm: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [form] = Form.useForm();
-  const [token, setToken] = useState<string | null>(null);
-
   const [searchParams, setSearchParams] = useSearchParams();
+  const token = searchParams.get("token");
 
-  useEffect(() => {
-    async function handleToken() {
-      let urlToken = searchParams.get("token");
+  const [loading, setLoading] = useState<boolean>(false);
 
-      if (!urlToken) {
-        urlToken = await AuthApi.EmailRegistrationService.postRegistration();
-        setSearchParams({ token: urlToken });
-      }
-
-      setToken(urlToken);
-
-      const userData = await AuthApi.EmailRegistrationService.getRegistration(urlToken);
-
-      form.setFieldsValue(userData);
-    }
-
-    handleToken();
-  }, []);
-
-  const onFormValuesChange = async (
-    changedValues: unknown,
-    allValues: unknown
-  ) => {
-    console.log(changedValues);
-    console.log(allValues);
+  const setToken = (newToken: string | null) => {
+    if (newToken)
+      setSearchParams({ token: newToken });
+    else
+      setSearchParams({});
   };
 
-  if (!token) return <div>Loading...</div>;
-
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      onValuesChange={onFormValuesChange}
+    <div
+      style={{
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
-      {currentStep === 0 && (
-        <Reg1
-          onNext={() => setCurrentStep(1)}
-          onPrev={() => setCurrentStep(9)}
-        />
-      )}
+      <div
+        style={{
+          width: "300px",
+          height: "auto",
+          boxSizing: "border-box",
+        }}
+      >
+        <Spin spinning={loading}>
+          {token === null && (
+            <RegistrationStart setToken={setToken} setLoading={setLoading} />
+          )}
 
-      {currentStep === 1 && (
-        <Reg2
-          onPrev={() => setCurrentStep(0)}
-          onNext={() => setCurrentStep(2)}
-        />
-      )}
-    </Form>
+          {token !== null && (
+            <RegistrationConfirm token={token} setLoading={setLoading} />
+          )}
+        </Spin>
+      </div>
+    </div>
   );
 };
